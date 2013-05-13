@@ -1,7 +1,3 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/Users/brian/Dropbox/MISC/peepcode-vim-code-1'
-let g:netrw_dirhist_2='/Users/brian/Dropbox/MISC/peepcode-vim-code-1/tutorial-apache-files'
-let g:netrw_dirhist_3='/Users/brian'
-let g:netrw_dirhist_4='/Users/brian/.vim'
-let g:netrw_dirhist_5='/Users/brian'
+let g:netrw_dirhist_cnt =1
+let g:netrw_dirhist_1='/Users/brian/Sites/brown-badger/app/models'
