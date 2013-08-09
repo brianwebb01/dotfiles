@@ -73,8 +73,8 @@ set t_Co=256
 " Tab settings
 set tabstop=4                    " Global tab width.
 set shiftwidth=4                 " And again, related.
+set softtabstop=4                " Sets the number of cols for tab
 set expandtab                    " Use spaces instead of tabs
-
 set laststatus=2                  " Show the status line all the time
 
 colorscheme vividchalk
@@ -126,5 +126,3 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
-
-inoremap \\ <Esc>
