@@ -3,9 +3,31 @@
 
 set nocompatible                  " Must come first because it changes other options.
 
-if filereadable(expand("~/.vimrc.before"))
-  	source ~/.vimrc.before
-endif
+" Function to get the git current branch
+function! GitBranch()
+  let branch = system("git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* //'")
+  if branch != ''
+    return substitute(branch, '\n', '', 'g')
+  endif
+  return ''
+endfunction
+
+" Funciton to get the git dirty, clean or ahead status
+function! GitStatus()
+  let clean = system("git status 2> /dev/null |grep -v ^# |grep 'working directory clean' | wc -l")
+  if clean == '1'
+    return '✓'  "clean
+  else
+    let ahead = system("git status 2> /dev/null |grep 'branch is ahead' | wc -l")
+    if ahead == '1'
+      return '!' "ahead
+    else
+      return '✗' "dirty
+    endif
+  endif
+endfunction
+
+
 
 silent! call pathogen#runtime_append_all_bundles()
 
@@ -49,16 +71,12 @@ set directory=$HOME/.vim/tmp//,.  " Keep swap files in one location
 set t_Co=256
 
 " Tab settings
-set tabstop=2                    " Global tab width.
-set shiftwidth=2                 " And again, related.
+set tabstop=4                    " Global tab width.
+set shiftwidth=4                 " And again, related.
 set expandtab                    " Use spaces instead of tabs
 
 set laststatus=2                  " Show the status line all the time
-" Useful status information at bottom of screen
-" set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 
-" Or use vividchalk
-" colorscheme topfunky-light
 colorscheme vividchalk
 
 " Tab mappings.
@@ -91,26 +109,22 @@ map <Leader>b :FufBuffer<Enter>
 " For the MakeGreen plugin and Ruby RSpec. Uncomment to use.
 autocmd BufNewFile,BufRead *_spec.rb compiler rspec
 
+" Airline plugin settings
 set encoding=utf-8 " Necessary to show Unicode glyphs
 let g:Powerline_symbols = 'unicode'
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
-
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-let g:airline_linecolumn_prefix = '␊ '
-let g:airline_linecolumn_prefix = '␤ '
-let g:airline_linecolumn_prefix = '¶ '
-let g:airline_branch_prefix = '⎇ '
-let g:airline_paste_symbol = 'ρ'
-let g:airline_paste_symbol = 'Þ'
-let g:airline_paste_symbol = '∥'
+set guifont=DejaVu\ Sans\ Mono\ for\ Powerline
 let g:airline_theme='badwolf'
+let g:airline_enable_branch=1
+let g:airline_section_c='%{GitStatus()}'
+"let g:airline_section_b='%{airline_current_branch} %{GitStatus()}')
+let g:airline_section_x='%t'
 let g:airline_section_y='%{getcwd()}'
-
 let g:airline_powerline_fonts = 1
 
-if filereadable(expand("~/.vimrc.after"))
-	source ~/.vimrc.after
-endif
+" Breaking arrow keys habit
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
+
+inoremap \\ <Esc>
