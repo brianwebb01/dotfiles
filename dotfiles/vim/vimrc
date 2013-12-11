@@ -27,6 +27,20 @@ function! GitStatus()
   endif
 endfunction
 
+"FuzzyFinder should ignore all files in .gitignore
+let ignorefile = ".gitignore"
+if filereadable(ignorefile)
+
+    let ignore = '\v\~$'
+
+    for line in readfile(ignorefile)
+        let line = substitute(line, '\.', '\\.', 'g')
+        let line = substitute(line, '\*', '.*', 'g')
+        let ignore .= '|^' . line
+    endfor
+
+    let g:fuf_coveragefile_exclude = ignore
+endif
 
 
 silent! call pathogen#runtime_append_all_bundles()
@@ -94,6 +108,9 @@ map <leader>tm :tabmove
 map <Leader>t :FufCoverageFile<Enter>
 map <Leader>T :FufBufferTag<Enter>
 map <Leader>b :FufBuffer<Enter>
+
+" NERDTree mapping
+map <leader>nt :NERDTree<cr>
 
 " Controversial...swap colon and semicolon for easier commands
 "nnoremap ; :
